@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'designDatabase.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -40,18 +40,33 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class Design{
-
-}
-
 class _MyHomePageState extends State<MyHomePage> {
+  List<Design> _designList = [];
 
-
-  void _addDesign(){
-
+  Future<void> _initializeDesigns() async{
+    final List<Design> designs = await Design.getDesigns();
+    setState(() {
+      _designList = designs;
+    });
   }
 
-  Widget designTile(){
+  @override
+  void initState() {
+    super.initState();
+    _initializeDesigns();
+  }
+
+  Future<void> _addDesign() async{
+    final _design = Design(name: 'hoge', type: 1, backColor: 1, textColor: 1);
+    await Design.insertDesign(_design);
+    if(_designList.length >= 10) Design.clearDesigns();
+    final List<Design> designs = await Design.getDesigns();
+    setState(() {
+      _designList = designs;
+    });
+  }
+
+  Widget _designTile(Design design){
     return Card(
       margin: EdgeInsets.all(10),
       elevation: 10,
@@ -77,21 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              designTile(),
-              designTile(),
-              designTile(),
-              designTile(),
-              designTile(),
-              designTile(),
-              designTile(),
-            ],
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: _designList.length,
+        itemBuilder: (BuildContext context, int index){
+          return _designTile(_designList[index]);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addDesign,
