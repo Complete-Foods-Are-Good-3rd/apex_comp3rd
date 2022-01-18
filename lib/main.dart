@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'designDatabase.dart';
+import 'designView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,24 +57,29 @@ class _MyHomePageState extends State<MyHomePage> {
     _initializeDesigns();
   }
 
-  Future<void> _addDesign() async{
-    final _design = Design(name: 'hoge', type: 1, backColor: 1, textColor: 1);
-    await Design.insertDesign(_design);
-    if(_designList.length >= 10) Design.clearDesigns();
-    final List<Design> designs = await Design.getDesigns();
-    setState(() {
-      _designList = designs;
-    });
-  }
+  Widget _designTile(Design design, int index){
+    return GestureDetector(
+      onTap: () async{
+        final result = await Navigator.push(context, MaterialPageRoute(
+          builder: (context) => DesignView(
+            isNew: false,
+            index: index,
+            designList: _designList,
+          ),
+        ));
 
-  Widget _designTile(Design design){
-    return Card(
-      margin: EdgeInsets.all(10),
-      elevation: 10,
-      child: Container(
-        color: Colors.white70,
-        height: 100,
-        width: 200,
+        if(result){
+          _initializeDesigns();
+        }
+      },
+      child: Card(
+        margin: const EdgeInsets.all(10.0),
+        elevation: 10,
+        child: Container(
+          color: Colors.white70,
+          height: 100,
+          width: 200,
+        ),
       ),
     );
   }
@@ -95,14 +101,48 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView.builder(
         itemCount: _designList.length,
         itemBuilder: (BuildContext context, int index){
-          return _designTile(_designList[index]);
+          return _designTile(_designList[index], index);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addDesign,
-        tooltip: 'Add design',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Column(
+        verticalDirection: VerticalDirection.up,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: () async{
+              final result = await Navigator.push(context, MaterialPageRoute(
+                builder: (context) => DesignView(
+                  isNew: true,
+                  index: -1,
+                  designList: _designList,
+                ),
+              ));
+
+              if(result){
+                _initializeDesigns();
+              }
+            },
+            tooltip: 'Add new design',
+            heroTag: 'Add new design',
+            child: const Icon(Icons.add),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 16.0),
+            child: FloatingActionButton(
+              onPressed: () async{
+                await Design.clearDesigns();
+                final List<Design> _designs = await Design.getDesigns();
+                setState(() {
+                  _designList = _designs;
+                });
+              },
+              tooltip: 'Clear designs',
+              heroTag: 'Clear designs',
+              child: const Icon(Icons.clear_outlined),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
