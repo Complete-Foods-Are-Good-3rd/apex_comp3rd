@@ -2,13 +2,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Design{
-  final int id;
-  final String name;
-  final int type;
-  final int backColor;
-  final int textColor;
+  final int id; //内部ID
+  final String name; //デザイン名
+  final int type; //テンプレのタイプ
+  final int backColor; //背景色
+  final int textColor; //文字色
+  final int magazineCapacity; //マガジン容量
+  final double reloadDistance; //リロード検知距離
 
-  Design({this.id, this.name, this.type, this.backColor, this.textColor});
+  Design({this.id, this.name, this.type, this.backColor, this.textColor, this.magazineCapacity, this.reloadDistance});
 
   Map<String, dynamic> toMap(){
     return{
@@ -17,20 +19,22 @@ class Design{
       'type': type,
       'backColor': backColor,
       'textColor': textColor,
+      'magazineCapacity': magazineCapacity,
+      'reloadDistance': reloadDistance,
     };
   }
 
   @override
   String toString(){
-    return 'Design{id: $id, name: $name, type: $type, backColor: $backColor, textColor: $textColor}';
+    return 'Design{id: $id, name: $name, type: $type, backColor: $backColor, textColor: $textColor, magazineCapacity: $magazineCapacity, reloadDistance: $reloadDistance}';
   }
 
   static Future<Database> get database async{
     final Future<Database> _database = openDatabase(
-      join(await getDatabasesPath(), 'design_database.db'),
+      join(await getDatabasesPath(), 'design_database_v2.db'),
       onCreate: (db, version){
         return db.execute(
-          "CREATE TABLE design(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type INTEGER, backColor INTEGER, textColor INTEGER)",
+          "CREATE TABLE design(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type INTEGER, backColor INTEGER, textColor INTEGER, magazineCapacity INTEGER, reloadDistance REAL)",
         );
       },
       version: 1,
@@ -57,6 +61,8 @@ class Design{
         type: maps[i]['type'],
         backColor: maps[i]['backColor'],
         textColor: maps[i]['textColor'],
+        magazineCapacity: maps[i]['magazineCapacity'],
+        reloadDistance: maps[i]['reloadDistance'],
       );
     });
   }
