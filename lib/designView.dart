@@ -18,7 +18,7 @@ class _DesignView extends State<DesignView> {
   @override
   initState(){
     super.initState();
-    Design _design = Design(name: '', type: 0, backColor: 0, textColor: 0);
+    Design _design = Design(name: '', type: 0, backColor: 0, textColor: 0, magazineCapacity: 0, reloadDistance: 0);
     if(!widget.isNew) _design = widget.designList[widget.index];
     setState(() {
       _currentDesign = _design;
@@ -88,6 +88,37 @@ class _DesignView extends State<DesignView> {
         child: Column(
           children: [
             Text(showId()),
+            TextField(
+              maxLines: 1,
+              decoration: const InputDecoration(
+                labelText: 'デザイン名',
+              ),
+              controller: TextEditingController(text: _currentDesign.name),
+              onChanged: (text) {
+                _currentDesign.name = text;
+              },
+            ),
+            TextField(
+              maxLines: 1,
+              decoration: const InputDecoration(
+                labelText: 'マガジン容量',
+              ),
+              controller: TextEditingController(text: _currentDesign.magazineCapacity.toString()),
+              keyboardType: TextInputType.number,
+              onChanged: (text) {
+                _currentDesign.magazineCapacity = int.parse(text);
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('リロード検知距離：${_currentDesign.reloadDistance}'),
+                ElevatedButton(
+                  child: const Text('測定'),
+                  onPressed: () {},
+                ),
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

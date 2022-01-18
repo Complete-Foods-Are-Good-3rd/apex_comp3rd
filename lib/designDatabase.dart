@@ -2,13 +2,13 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Design{
-  final int id; //内部ID
-  final String name; //デザイン名
-  final int type; //テンプレのタイプ
-  final int backColor; //背景色
-  final int textColor; //文字色
-  final int magazineCapacity; //マガジン容量
-  final double reloadDistance; //リロード検知距離
+  int id; //内部ID
+  String name; //デザイン名
+  int type; //テンプレのタイプ
+  int backColor; //背景色
+  int textColor; //文字色
+  int magazineCapacity; //マガジン容量
+  double reloadDistance; //リロード検知距離
 
   Design({this.id, this.name, this.type, this.backColor, this.textColor, this.magazineCapacity, this.reloadDistance});
 
