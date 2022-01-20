@@ -14,6 +14,9 @@ class DesignView extends StatefulWidget {
 
 class _DesignView extends State<DesignView> {
   Design _currentDesign;
+  int _type = 0;
+  int _backColor = 0;
+  int _textColor = 0;
 
   @override
   initState(){
@@ -22,6 +25,9 @@ class _DesignView extends State<DesignView> {
     if(!widget.isNew) _design = widget.designList[widget.index];
     setState(() {
       _currentDesign = _design;
+      _type = _currentDesign.type;
+      _backColor = _currentDesign.backColor;
+      _textColor = _currentDesign.textColor;
     });
   }
 
@@ -77,9 +83,25 @@ class _DesignView extends State<DesignView> {
     Navigator.pop(context, true);
   }
 
+  Widget typeList({String title, int value}){
+    return RadioListTile(
+      secondary: Icon(Icons.ac_unit),
+      title: Text(title),
+      value: value,
+      groupValue: _type,
+      onChanged: (int e) => {
+        setState(() {
+          _type = e;
+          _currentDesign.type = e;
+        }),
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: _barName(),
       ),
@@ -108,6 +130,31 @@ class _DesignView extends State<DesignView> {
               onChanged: (text) {
                 _currentDesign.magazineCapacity = int.parse(text);
               },
+            ),
+            SizedBox(
+              height: 200,
+              width: 150,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    typeList(title: '0', value: 0),
+                    typeList(title: '1', value: 1),
+                    typeList(title: '2', value: 2),
+                    typeList(title: '3', value: 3),
+                    typeList(title: '4', value: 4),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                // SingleChildScrollView(
+                //   child: Text('hogehoehgeogoee'),
+                // ),
+                // SingleChildScrollView(
+                //   child: Text('hogehoehgeogoee'),
+                // ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
