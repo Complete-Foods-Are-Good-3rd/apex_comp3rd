@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'designDatabase.dart';
+import 'utility.dart';
 
 class DesignView extends StatefulWidget {
   const DesignView({Key key, this.isNew, this.index, this.designList}) : super(key: key);
@@ -17,9 +18,6 @@ class _DesignView extends State<DesignView> {
   int _type = 0;
   int _backColor = 0;
   int _textColor = 0;
-  final List<Color> _colors = [const Color(0xFFFFFFFF), const Color(0xFF000000), const Color(0xFF0000FF), const Color(0xFFFF00FF),
-    const Color(0xFFFFFF00), const Color(0xFF00FFFF), const Color(0xFFFF0000), const Color(0xFF00FF00)];
-  final List<String> _colorNames = ['White', 'Black', 'Blue', 'Magenta', 'Yellow', 'Cyan', 'Red', 'Green'];
 
   @override
   initState(){
@@ -88,7 +86,11 @@ class _DesignView extends State<DesignView> {
 
   Widget typeList({String title, int value}){
     return RadioListTile(
-      secondary: const Icon(Icons.ac_unit),
+      secondary: SizedBox(
+        height: 50,
+        width: 50,
+        child: imageList[value],
+      ),
       title: Text(title),
       value: value,
       groupValue: _type,
@@ -103,7 +105,7 @@ class _DesignView extends State<DesignView> {
 
   Widget textColorList({int value}){
     return RadioListTile(
-      secondary: Icon((value == 0 ? Icons.article_outlined : Icons.article), color: (value == 0 ? _colors[1] : _colors[value])),
+      secondary: Icon((value == 0 ? Icons.article_outlined : Icons.article), color: (value == 0 ? colorList[1] : colorList[value])),
       value: value,
       groupValue: _textColor,
       onChanged: (int e) => {
@@ -117,7 +119,7 @@ class _DesignView extends State<DesignView> {
 
   Widget backColorList({int value}){
     return RadioListTile(
-      secondary: Icon((value == 0 ? Icons.circle_outlined : Icons.circle), color: (value == 0 ? _colors[1] : _colors[value])),
+      secondary: Icon((value == 0 ? Icons.circle_outlined : Icons.circle), color: (value == 0 ? colorList[1] : colorList[value])),
       value: value,
       groupValue: _backColor,
       onChanged: (int e) => {
@@ -208,7 +210,7 @@ class _DesignView extends State<DesignView> {
                       itemBuilder: (BuildContext context, int index) {
                         return textColorList(value: index);
                       },
-                      itemCount: _colors.length,
+                      itemCount: colorList.length,
                     ),
                   ),
                   Container(
@@ -223,7 +225,7 @@ class _DesignView extends State<DesignView> {
                       itemBuilder: (BuildContext context, int index) {
                         return backColorList(value: index);
                       },
-                      itemCount: _colors.length,
+                      itemCount: colorList.length,
                     ),
                   ),
                 ],

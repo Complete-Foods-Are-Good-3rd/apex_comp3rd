@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'designDatabase.dart';
 import 'designView.dart';
+import 'utility.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,29 +59,69 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _designTile(Design design, int index){
-    return GestureDetector(
-      onTap: () async{
-        final result = await Navigator.push(context, MaterialPageRoute(
-          builder: (context) => DesignView(
-            isNew: false,
-            index: index,
-            designList: _designList,
-          ),
-        ));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () async{
+            final result = await Navigator.push(context, MaterialPageRoute(
+              builder: (context) => DesignView(
+                isNew: false,
+                index: index,
+                designList: _designList,
+              ),
+            ));
 
-        if(result){
-          _initializeDesigns();
-        }
-      },
-      child: Card(
-        margin: const EdgeInsets.all(10.0),
-        elevation: 10,
-        child: Container(
-          color: Colors.white70,
-          height: 100,
-          width: 200,
+            if(result){
+              _initializeDesigns();
+            }
+          },
+          child: Card(
+            margin: const EdgeInsets.all(10.0),
+            elevation: 10,
+            child: Container(
+              color: Colors.white70,
+              height: 100,
+              width:330,
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  imageList[design.type],
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left:10),
+                      child: Text(
+                        design.name,
+                        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon((design.textColor == 0 ? Icons.article_outlined : Icons.article), color: (design.textColor == 0 ? colorList[1] : colorList[design.textColor])),
+                      Icon((design.backColor == 0 ? Icons.circle_outlined : Icons.circle), color: (design.backColor == 0 ? colorList[1] : colorList[design.backColor])),
+                      Text(design.magazineCapacity.toString()),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
+        ElevatedButton(
+          onPressed: () {},
+          child: const SizedBox(
+            height: 100,
+            width: 32,
+            child: Center(
+              child: Text('適用', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
