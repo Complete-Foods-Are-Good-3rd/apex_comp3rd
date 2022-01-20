@@ -17,6 +17,9 @@ class _DesignView extends State<DesignView> {
   int _type = 0;
   int _backColor = 0;
   int _textColor = 0;
+  final List<Color> _colors = [const Color(0xFFFFFFFF), const Color(0xFF000000), const Color(0xFF0000FF), const Color(0xFFFF00FF),
+    const Color(0xFFFFFF00), const Color(0xFF00FFFF), const Color(0xFFFF0000), const Color(0xFF00FF00)];
+  final List<String> _colorNames = ['White', 'Black', 'Blue', 'Magenta', 'Yellow', 'Cyan', 'Red', 'Green'];
 
   @override
   initState(){
@@ -85,7 +88,7 @@ class _DesignView extends State<DesignView> {
 
   Widget typeList({String title, int value}){
     return RadioListTile(
-      secondary: Icon(Icons.ac_unit),
+      secondary: const Icon(Icons.ac_unit),
       title: Text(title),
       value: value,
       groupValue: _type,
@@ -98,6 +101,48 @@ class _DesignView extends State<DesignView> {
     );
   }
 
+  Widget backColorList({int value}){
+    return RadioListTile(
+      secondary: Icon(Icons.circle, color: _colors[value]),
+      value: value,
+      groupValue: _backColor,
+      onChanged: (int e) => {
+        setState(() {
+          _backColor = e;
+          _currentDesign.backColor = e;
+        }),
+      },
+    );
+  }
+
+  Widget textColorList({int value}){
+    return RadioListTile(
+      secondary: Icon(Icons.circle_outlined, color: _colors[value]),
+      value: value,
+      groupValue: _textColor,
+      onChanged: (int e) => {
+        setState(() {
+          _textColor = e;
+          _currentDesign.textColor = e;
+        }),
+      },
+    );
+  }
+
+  Widget topTile(String title){
+    return Container(
+      child: ListTile(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+      ),
+      decoration: const BoxDecoration(
+        color: Colors.tealAccent,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -107,79 +152,109 @@ class _DesignView extends State<DesignView> {
       ),
       body: Container(
         margin: const EdgeInsets.all(30.0),
-        child: Column(
-          children: [
-            Text(showId()),
-            TextField(
-              maxLines: 1,
-              decoration: const InputDecoration(
-                labelText: 'デザイン名',
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              topTile(showId()),
+              TextField(
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  labelText: 'デザイン名',
+                ),
+                controller: TextEditingController(text: _currentDesign.name),
+                onChanged: (text) {
+                  _currentDesign.name = text;
+                },
               ),
-              controller: TextEditingController(text: _currentDesign.name),
-              onChanged: (text) {
-                _currentDesign.name = text;
-              },
-            ),
-            TextField(
-              maxLines: 1,
-              decoration: const InputDecoration(
-                labelText: 'マガジン容量',
+              TextField(
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  labelText: 'マガジン容量',
+                ),
+                controller: TextEditingController(text: _currentDesign.magazineCapacity.toString()),
+                keyboardType: TextInputType.number,
+                onChanged: (text) {
+                  _currentDesign.magazineCapacity = int.parse(text);
+                },
               ),
-              controller: TextEditingController(text: _currentDesign.magazineCapacity.toString()),
-              keyboardType: TextInputType.number,
-              onChanged: (text) {
-                _currentDesign.magazineCapacity = int.parse(text);
-              },
-            ),
-            SizedBox(
-              height: 200,
-              width: 150,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    typeList(title: '0', value: 0),
-                    typeList(title: '1', value: 1),
-                    typeList(title: '2', value: 2),
-                    typeList(title: '3', value: 3),
-                    typeList(title: '4', value: 4),
-                  ],
+              const SizedBox(height: 10),
+              topTile('テンプレートタイプ'),
+              Container(
+                height: 300,
+                width: 500,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      typeList(title: '0', value: 0),
+                      typeList(title: '1', value: 1),
+                      typeList(title: '2', value: 2),
+                      typeList(title: '3', value: 3),
+                      typeList(title: '4', value: 4),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                // SingleChildScrollView(
-                //   child: Text('hogehoehgeogoee'),
-                // ),
-                // SingleChildScrollView(
-                //   child: Text('hogehoehgeogoee'),
-                // ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text('リロード検知距離：${_currentDesign.reloadDistance}'),
-                ElevatedButton(
-                  child: const Text('測定'),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _saveDesign,
-                  child: const Text('保存'),
-                ),
-                OutlinedButton(
-                  onPressed: _deleteDesign,
-                  child: const Text('削除'),
-                ),
-              ],
-            ),
-          ],
+              const Divider(color: Colors.black),
+              topTile('文字色・背景色'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 200,
+                    width: 160,
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return textColorList(value: index);
+                      },
+                      itemCount: _colors.length,
+                    ),
+                  ),
+                  Container(
+                    height: 200,
+                    child: const VerticalDivider(),
+                  ),
+                  Container(
+                    height: 200,
+                    width: 160,
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return backColorList(value: index);
+                      },
+                      itemCount: _colors.length,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(color: Colors.black),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('リロード検知距離：${_currentDesign.reloadDistance}'),
+                  ElevatedButton(
+                    child: const Text('測定'),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              const Divider(color: Colors.black),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: _saveDesign,
+                    child: const Text('保存'),
+                  ),
+                  OutlinedButton(
+                    onPressed: _deleteDesign,
+                    child: const Text('削除'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
