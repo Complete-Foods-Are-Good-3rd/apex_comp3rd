@@ -101,29 +101,29 @@ class _DesignView extends State<DesignView> {
     );
   }
 
-  Widget backColorList({int value}){
-    return RadioListTile(
-      secondary: Icon(Icons.circle, color: _colors[value]),
-      value: value,
-      groupValue: _backColor,
-      onChanged: (int e) => {
-        setState(() {
-          _backColor = e;
-          _currentDesign.backColor = e;
-        }),
-      },
-    );
-  }
-
   Widget textColorList({int value}){
     return RadioListTile(
-      secondary: Icon(Icons.circle_outlined, color: _colors[value]),
+      secondary: Icon((value == 0 ? Icons.article_outlined : Icons.article), color: (value == 0 ? _colors[1] : _colors[value])),
       value: value,
       groupValue: _textColor,
       onChanged: (int e) => {
         setState(() {
           _textColor = e;
           _currentDesign.textColor = e;
+        }),
+      },
+    );
+  }
+
+  Widget backColorList({int value}){
+    return RadioListTile(
+      secondary: Icon((value == 0 ? Icons.circle_outlined : Icons.circle), color: (value == 0 ? _colors[1] : _colors[value])),
+      value: value,
+      groupValue: _backColor,
+      onChanged: (int e) => {
+        setState(() {
+          _backColor = e;
+          _currentDesign.backColor = e;
         }),
       },
     );
