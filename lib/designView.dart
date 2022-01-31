@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'designDatabase.dart';
 import 'utility.dart';
+import 'request.dart';
 
 class DesignView extends StatefulWidget {
   const DesignView({Key key, this.isNew, this.index, this.designList}) : super(key: key);
@@ -237,7 +238,13 @@ class _DesignView extends State<DesignView> {
                   Text('リロード検知距離：${_currentDesign.reloadDistance}'),
                   ElevatedButton(
                     child: const Text('測定'),
-                    onPressed: () {},
+                    onPressed: () async{
+                      debugPrint("getRequest start");
+                      double dis = await getDistance();
+                      setState(() {
+                        _currentDesign.reloadDistance = dis;
+                      });
+                    },
                   ),
                 ],
               ),
