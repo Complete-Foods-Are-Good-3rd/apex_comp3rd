@@ -13,3 +13,13 @@ Future<String> postRequest(Map<String, dynamic> value) async {
     return "更新に失敗しました(${resp.body})";
   }
 }
+
+Future<double> getDistance() async {
+  String url = "http://192.168.4.1/getDistance";
+  http.Response resp = await http.get(url);
+  if(resp.statusCode == 200){
+    return double.parse(resp.body);
+  }else{
+    return -1;
+  }
+}
