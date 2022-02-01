@@ -18,7 +18,8 @@ Future<double> getDistance() async {
   String url = "http://192.168.4.1/getDistance";
   http.Response resp = await http.get(url);
   if(resp.statusCode == 200){
-    return double.parse(resp.body);
+    Map<String, dynamic> decodedJson = json.decode(resp.body);
+    return decodedJson["distance"];
   }else{
     return -1;
   }
