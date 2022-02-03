@@ -240,7 +240,8 @@ class _DesignView extends State<DesignView> {
                     child: const Text('測定'),
                     onPressed: () async{
                       debugPrint("getRequest start");
-                      double dis = await getDistance();
+                      var dis = await getDistance();
+                      debugPrint("distance:$dis");
                       setState(() {
                         _currentDesign.reloadDistance = dis;
                       });
