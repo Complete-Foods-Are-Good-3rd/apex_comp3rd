@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _designTile(Design design, int index){
+    final Size size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               color: Colors.white70,
               height: 100,
-              width:330,
+              width:size.width * 0.7,
               padding: const EdgeInsets.all(5.0),
               child: Row(
                 children: [
