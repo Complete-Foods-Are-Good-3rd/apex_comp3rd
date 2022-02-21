@@ -5,23 +5,23 @@ final List<Color> colorList = [const Color(0xFFFFFFFF), const Color(0xFF000000),
 final List<String> colorNames = ['White', 'Black', 'Blue', 'Magenta', 'Yellow', 'Cyan', 'Red', 'Green'];
 final List<Image> imageList = [
   Image.asset(
-    'assets/ring.png',
+    'assets/counter_0.png',
     fit: BoxFit.contain,
   ),
   Image.asset(
-    'assets/ring.png',
+    'assets/counter_1.png',
     fit: BoxFit.contain,
   ),
-  Image.asset(
-    'assets/ring.png',
-    fit: BoxFit.contain,
-  ),
-  Image.asset(
-    'assets/ring.png',
-    fit: BoxFit.contain,
-  ),
-  Image.asset(
-    'assets/ring.png',
-    fit: BoxFit.contain,
-  ),
+  // Image.asset(
+  //   'assets/ring.png',
+  //   fit: BoxFit.contain,
+  // ),
+  // Image.asset(
+  //   'assets/ring.png',
+  //   fit: BoxFit.contain,
+  // ),
+  // Image.asset(
+  //   'assets/ring.png',
+  //   fit: BoxFit.contain,
+  // ),
 ];
