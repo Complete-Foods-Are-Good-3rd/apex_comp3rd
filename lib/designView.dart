@@ -23,7 +23,7 @@ class _DesignView extends State<DesignView> {
   @override
   initState(){
     super.initState();
-    Design _design = Design(name: '', type: 0, backColor: 0, textColor: 0, magazineCapacity: 0, reloadDistance: 0);
+    Design _design = Design(name: '', type: 0, backColor: 0, textColor: 0, magazineCapacity: 1, reloadDistance: 0);
     if(!widget.isNew) _design = widget.designList[widget.index];
     setState(() {
       _currentDesign = _design;
@@ -146,6 +146,15 @@ class _DesignView extends State<DesignView> {
     );
   }
 
+  String returnCurrentCapacity(){
+    if(widget.isNew){
+      return '';
+    }
+    else {
+      return _currentDesign.magazineCapacity.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -169,21 +178,21 @@ class _DesignView extends State<DesignView> {
                   _currentDesign.name = text;
                 },
               ),
-              TextField(
+              TextFormField(
                 maxLines: 1,
                 decoration: const InputDecoration(
                   labelText: 'マガジン容量',
                 ),
-                controller: TextEditingController(text: _currentDesign.magazineCapacity.toString()),
+                initialValue: returnCurrentCapacity(),
                 keyboardType: TextInputType.number,
                 onChanged: (text) {
                   _currentDesign.magazineCapacity = int.parse(text);
                 },
               ),
               const SizedBox(height: 10),
-              topTile('テンプレートタイプ'),
+              topTile('デザインタイプ'),
               Container(
-                height: 300,
+                height: 60.0 * 2, // デザインの数に応じで係数を変える
                 width: 500,
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: SingleChildScrollView(
@@ -191,9 +200,6 @@ class _DesignView extends State<DesignView> {
                     children: [
                       typeList(title: '0', value: 0),
                       typeList(title: '1', value: 1),
-                      typeList(title: '2', value: 2),
-                      typeList(title: '3', value: 3),
-                      typeList(title: '4', value: 4),
                     ],
                   ),
                 ),
